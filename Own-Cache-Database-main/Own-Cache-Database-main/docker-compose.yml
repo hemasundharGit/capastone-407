@@ -1,0 +1,21 @@
+version: '3'
+services:
+  cache-server:
+    build:
+      context: .
+    container_name: cache-server
+    ports:
+      - "6379:6379"
+    command: ["node", "src/server.js"]
+
+  client:
+    build:
+      context: .
+    container_name: cache-client
+    depends_on:
+      - cache-server
+    stdin_open: true
+    tty: true
+    env_file:
+      - .env
+    command: ["node", "src/client/client.js"]
